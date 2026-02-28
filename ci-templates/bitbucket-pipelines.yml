@@ -1,0 +1,11 @@
+image: node:20
+
+pipelines:
+  default:
+    - step:
+        name: Devflow
+        script:
+          - sh ci/run.sh
+        artifacts:
+          - reports/devflow-report.json
+          - reports/devflow-summary.txt

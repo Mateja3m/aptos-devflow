@@ -1,0 +1,16 @@
+version: 2.1
+
+jobs:
+  devflow:
+    docker:
+      - image: cimg/node:20.11
+    steps:
+      - checkout
+      - run: sh ci/run.sh
+      - store_artifacts:
+          path: reports
+
+workflows:
+  devflow:
+    jobs:
+      - devflow

@@ -1,0 +1,14 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "20.x"
+  - script: sh ci/run.sh
+    displayName: Run Devflow
+  - publish: reports
+    artifact: devflow-reports

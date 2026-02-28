@@ -1,0 +1,13 @@
+image: node:20
+
+stages:
+  - validate
+
+devflow:
+  stage: validate
+  script:
+    - sh ci/run.sh
+  artifacts:
+    paths:
+      - reports/devflow-report.json
+      - reports/devflow-summary.txt
