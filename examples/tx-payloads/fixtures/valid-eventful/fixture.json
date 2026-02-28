@@ -1,0 +1,28 @@
+{
+  "id": "valid-eventful",
+  "title": "Valid payload with events",
+  "description": "Transaction payload with event sample.",
+  "kind": "transaction-payload",
+  "expectedStatus": "pass",
+  "profile": "relaxed",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::coin::transfer",
+    "type_arguments": ["0x1::aptos_coin::AptosCoin"],
+    "arguments": ["0x9", "77"],
+    "max_gas_amount": 700,
+    "gas_unit_price": 1,
+    "network": "testnet",
+    "url": "https://api.testnet.aptoslabs.com/v1",
+    "events": [
+      {
+        "guid": "0x99",
+        "sequence_number": "1",
+        "data": {
+          "receiver": "0x9"
+        }
+      }
+    ]
+  }
+}

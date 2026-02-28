@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@idoa/core": ["packages/core/src/index.ts"],
+      "@idoa/report": ["packages/report/src/index.ts"],
+      "@idoa/validator": ["packages/validator/src/index.ts"],
+      "@idoa/validator/node": ["packages/validator/src/node.ts"],
+      "@idoa/harness": ["packages/harness/src/index.ts"],
+      "@idoa/cli": ["packages/cli/src/index.ts"]
+    },
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "lib": ["ES2022", "DOM"]
+  }
+}

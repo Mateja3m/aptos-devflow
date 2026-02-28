@@ -1,0 +1,17 @@
+{
+  "id": "invalid-missing-type",
+  "title": "Invalid missing type",
+  "description": "Payload misses required type field.",
+  "kind": "transaction-payload",
+  "expectedStatus": "fail",
+  "profile": "strict",
+  "mode": "offline",
+  "input": {
+    "function": "0x1::aptos_account::transfer",
+    "type_arguments": [],
+    "arguments": ["0x2", "10"],
+    "max_gas_amount": 1000,
+    "gas_unit_price": 1,
+    "network": "testnet"
+  }
+}

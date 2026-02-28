@@ -1,0 +1,17 @@
+{
+  "name": "@idoa/playground-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && node ./dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "@idoa/core": "file:../../packages/core",
+    "@idoa/harness": "file:../../packages/harness",
+    "@idoa/report": "file:../../packages/report",
+    "@idoa/validator": "file:../../packages/validator"
+  }
+}

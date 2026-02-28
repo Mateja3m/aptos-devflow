@@ -1,0 +1,36 @@
+{
+  "name": "aptos-devflow-toolkit",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "npm@10",
+  "workspaces": ["packages/*", "playground", "playground/server"],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsc -p playground/server/tsconfig.json && npm --prefix playground run build",
+    "clean": "node scripts/clean.mjs",
+    "doctor": "node packages/cli/dist/bin/devflow.js doctor",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "tsc -b tsconfig.build.json --pretty false",
+    "test": "vitest run",
+    "verify": "npm run build && npm test && npm run lint && npm run doctor",
+    "release:check": "npm run build && npm test && npm pack --workspaces --pack-destination .release",
+    "release:tag": "node scripts/release-tag.mjs",
+    "release:publish": "npm publish --workspaces --access public"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.1",
+    "vitest": "^3.0.8"
+  }
+}

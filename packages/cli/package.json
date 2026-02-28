@@ -1,0 +1,36 @@
+{
+  "name": "@idoa/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Aptos Devflow command line interface for validation, harness runs, reports and doctor checks.",
+  "license": "MIT",
+  "homepage": "https://github.com/idoa-network/aptos-devflow-toolkit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idoa-network/aptos-devflow-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/idoa-network/aptos-devflow-toolkit/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "devflow": "./dist/bin/devflow.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@idoa/core": "^0.1.0",
+    "@idoa/harness": "^0.1.0",
+    "@idoa/report": "^0.1.0",
+    "@idoa/validator": "^0.1.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "invalid-null-arg",
+  "title": "Invalid null argument",
+  "description": "Entry function contains a null argument.",
+  "kind": "transaction-payload",
+  "expectedStatus": "fail",
+  "profile": "strict",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::aptos_account::transfer",
+    "type_arguments": [],
+    "arguments": ["0x2", null],
+    "max_gas_amount": 1000,
+    "gas_unit_price": 1,
+    "network": "testnet"
+  }
+}

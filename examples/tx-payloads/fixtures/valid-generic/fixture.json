@@ -1,0 +1,20 @@
+{
+  "id": "valid-generic",
+  "title": "Valid generic payload",
+  "description": "Generic JSON validated through shared rules.",
+  "kind": "generic-json",
+  "expectedStatus": "pass",
+  "profile": "relaxed",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::object::transfer",
+    "type_arguments": [],
+    "arguments": ["0xbeef", "0xcafe"],
+    "max_gas_amount": 750,
+    "gas_unit_price": 1,
+    "network": "testnet",
+    "url": "https://api.testnet.aptoslabs.com/v1",
+    "events": []
+  }
+}

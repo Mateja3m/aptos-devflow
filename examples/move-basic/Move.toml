@@ -1,0 +1,6 @@
+[package]
+name = "MoveBasic"
+version = "0.0.1"
+
+[addresses]
+move_basic = "0x42"

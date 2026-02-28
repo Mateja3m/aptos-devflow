@@ -1,0 +1,34 @@
+{
+  "name": "@idoa/validator",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Deterministic Aptos payload and environment validation rules for browser and Node runtimes.",
+  "license": "MIT",
+  "homepage": "https://github.com/idoa-network/aptos-devflow-toolkit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idoa-network/aptos-devflow-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/idoa-network/aptos-devflow-toolkit/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@idoa/core": "^0.1.0"
+  }
+}

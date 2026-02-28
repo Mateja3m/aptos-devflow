@@ -1,0 +1,18 @@
+{
+  "id": "invalid-gas",
+  "title": "Invalid gas configuration",
+  "description": "Zero gas unit price should fail.",
+  "kind": "transaction-payload",
+  "expectedStatus": "fail",
+  "profile": "strict",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::aptos_account::transfer",
+    "type_arguments": [],
+    "arguments": ["0x2", "10"],
+    "max_gas_amount": 30000,
+    "gas_unit_price": 0,
+    "network": "testnet"
+  }
+}

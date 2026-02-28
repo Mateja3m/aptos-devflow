@@ -1,0 +1,20 @@
+{
+  "id": "valid-stake",
+  "title": "Valid staking payload",
+  "description": "Sample staking entry function call.",
+  "kind": "transaction-payload",
+  "expectedStatus": "pass",
+  "profile": "relaxed",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::delegation_pool::add_stake",
+    "type_arguments": [],
+    "arguments": ["0x3", "5000"],
+    "max_gas_amount": 900,
+    "gas_unit_price": 1,
+    "network": "mainnet",
+    "url": "https://api.mainnet.aptoslabs.com/v1",
+    "events": []
+  }
+}

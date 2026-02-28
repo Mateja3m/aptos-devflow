@@ -1,0 +1,20 @@
+{
+  "id": "valid-local",
+  "title": "Valid local payload",
+  "description": "Sample local network payload.",
+  "kind": "transaction-payload",
+  "expectedStatus": "pass",
+  "profile": "relaxed",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::managed_coin::register",
+    "type_arguments": ["0x1::aptos_coin::AptosCoin"],
+    "arguments": [],
+    "max_gas_amount": 800,
+    "gas_unit_price": 1,
+    "network": "local",
+    "url": "http://127.0.0.1:8080/v1",
+    "events": []
+  }
+}

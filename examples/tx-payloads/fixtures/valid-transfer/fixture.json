@@ -1,0 +1,28 @@
+{
+  "id": "valid-transfer",
+  "title": "Valid transfer payload",
+  "description": "Basic Aptos coin transfer payload.",
+  "kind": "transaction-payload",
+  "expectedStatus": "pass",
+  "profile": "relaxed",
+  "mode": "offline",
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::aptos_account::transfer",
+    "type_arguments": [],
+    "arguments": ["0x2", "1000"],
+    "max_gas_amount": 1000,
+    "gas_unit_price": 1,
+    "network": "testnet",
+    "url": "https://api.testnet.aptoslabs.com/v1",
+    "events": [
+      {
+        "guid": "0x1",
+        "sequence_number": "0",
+        "data": {
+          "amount": "1000"
+        }
+      }
+    ]
+  }
+}
