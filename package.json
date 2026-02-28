@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "packageManager": "npm@10",
+  "packageManager": "npm@11.4.2",
   "workspaces": ["packages/*", "playground", "playground/server"],
   "engines": {
     "node": ">=18.18.0"
