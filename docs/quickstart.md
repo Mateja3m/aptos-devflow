@@ -10,23 +10,29 @@
 
 ```bash
 npm install
-npm run build
 ```
 
-## Run validation
+## Primary repository proof
 
 ```bash
-node packages/cli/dist/bin/devflow.js validate examples/tx-payloads/fixtures/valid-transfer/fixture.json
+npm run doctor
 ```
 
-## Run fixture harness
+## Full repository verification
 
 ```bash
-node packages/cli/dist/bin/devflow.js harness run examples/tx-payloads/fixtures -o reports
+npm run verify
 ```
 
-## View report
+## Package proof flow
 
 ```bash
-node packages/cli/dist/bin/devflow.js report view reports/devflow-report.json
+npm install @idoa/aptos-devflow-cli
+npx devflow doctor
+```
+
+Fallback package execution:
+
+```bash
+npx @idoa/aptos-devflow-cli doctor
 ```

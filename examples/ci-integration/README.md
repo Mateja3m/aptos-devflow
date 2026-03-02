@@ -5,11 +5,17 @@ This example shows the minimal command set that a vendor neutral CI runner execu
 ```bash
 npm install
 npm run build
-devflow validate examples/tx-payloads/fixtures/valid-transfer/fixture.json -j
-devflow harness run examples/tx-payloads/fixtures -o reports
+npm run doctor
 ```
 
 Generated artifacts:
 
 - `reports/devflow-report.json`
 - `reports/devflow-summary.txt`
+
+Package usage after publishing the CLI package:
+
+```bash
+npm install @idoa/aptos-devflow-cli
+npx devflow doctor
+```

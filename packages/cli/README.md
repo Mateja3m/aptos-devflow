@@ -1,4 +1,4 @@
-# @idoa/cli
+# @idoa/aptos-devflow-cli
 
 Command line entrypoint for Aptos Devflow.
 
@@ -13,7 +13,7 @@ Command line entrypoint for Aptos Devflow.
 ## Install
 
 ```bash
-npm install @idoa/cli
+npm install @idoa/aptos-devflow-cli
 ```
 
 ## Use
@@ -22,6 +22,12 @@ Run the main health check:
 
 ```bash
 npx devflow doctor
+```
+
+Fallback package execution:
+
+```bash
+npx @idoa/aptos-devflow-cli doctor
 ```
 
 Validate one sample:
@@ -36,9 +42,15 @@ Run the full fixture suite:
 npx devflow harness run examples/tx-payloads/fixtures -o reports
 ```
 
+Global install:
+
+```bash
+npm install -g @idoa/aptos-devflow-cli
+devflow doctor
+```
+
 ## Docs
 
 - [Root README](../../README.md)
 - [Quickstart](../../docs/quickstart.md)
-- [CI setup](../../docs/ci-setup.md)
-- [Report format](../../docs/report-format.md)
+- [Report Format](../../docs/report-format.md)

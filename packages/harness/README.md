@@ -22,7 +22,7 @@ import { runHarness } from "@idoa/harness";
 
 const result = await runHarness({
   fixtureDir: "examples/tx-payloads/fixtures",
-  outputDir: "reports"
+  outputDir: "reports",
 });
 
 console.log(result.exitCode);
@@ -31,5 +31,5 @@ console.log(result.exitCode);
 ## Docs
 
 - [Root README](../../README.md)
-- [Reproducible demo](../../docs/reproducible-demo.md)
-- [Report format](../../docs/report-format.md)
+- [Reproducible Demo](../../docs/reproducible-demo.md)
+- [Report Format](../../docs/report-format.md)

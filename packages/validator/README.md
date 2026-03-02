@@ -25,7 +25,7 @@ import { validateOfflineInput } from "@idoa/validator";
 const result = await validateOfflineInput({
   kind: "transaction-payload",
   source: "payload.json",
-  data: payload
+  data: payload,
 });
 ```
 
@@ -37,12 +37,12 @@ import { validateInputNode } from "@idoa/validator/node";
 const result = await validateInputNode({
   kind: "move-package",
   source: "examples/move-basic/Move.toml",
-  data: {}
+  data: {},
 });
 ```
 
 ## Docs
 
 - [Root README](../../README.md)
-- [Validator rules](../../docs/validator-rules.md)
-- [Report format](../../docs/report-format.md)
+- [Validator Rules](../../docs/validator-rules.md)
+- [Report Format](../../docs/report-format.md)

@@ -27,7 +27,18 @@ The report schema lives in `packages/core`.
 Each detail contains:
 
 - fixture id when available
+- fixture expected outcome when available
 - target title
 - per fixture summary
 - overall fixture status
 - full ordered rule results
+
+## Summary artifact
+
+`reports/devflow-summary.txt` contains:
+
+- `total`
+- `pass`
+- `fail`
+- `warning`
+- `top_failures`

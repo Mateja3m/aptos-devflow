@@ -27,5 +27,4 @@ const json = stableStringify(summary);
 ## Docs
 
 - [Root README](../../README.md)
-- [Report format](../../docs/report-format.md)
-- [Validator rules](../../docs/validator-rules.md)
+- [Report Format](../../docs/report-format.md)

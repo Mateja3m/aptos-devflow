@@ -27,4 +27,5 @@ const parsed = parseReport(json);
 ## Docs
 
 - [Root README](../../README.md)
-- [Report format](../../docs/report-format.md)
+- [Report Format](../../docs/report-format.md)
+- [CI Setup](../../docs/ci-setup.md)

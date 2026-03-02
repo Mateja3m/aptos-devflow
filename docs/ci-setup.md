@@ -20,12 +20,14 @@ The toolkit ships with portable CI templates and one shared shell entrypoint.
 - runs `devflow validate`
 - runs `devflow harness run`
 - writes artifacts into `reports/`
+- relies on exit codes and artifact files only
 
 ## Init flow
 
 Use:
 
 ```bash
+npm run build
 node packages/cli/dist/bin/devflow.js init-ci gitlab
 ```
 
@@ -59,3 +61,5 @@ CI should always retain:
 - `fail`
 - `warning`
 - `top_failures`
+
+`npm run doctor` in this repository writes the same artifact pair for local verification.

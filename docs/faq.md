@@ -14,4 +14,10 @@ In `reports/`.
 
 ## Can I publish packages separately?
 
-Yes. Packages are prepared for scoped publish under `@idoa/*`.
+Yes. Public packages are prepared for scoped publish under `@idoa/*`.
+
+## What is the main local proof command?
+
+Use `npm run doctor` in the repository.
+
+After installing the CLI package, use `npx devflow doctor`.
