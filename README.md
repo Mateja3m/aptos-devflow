@@ -56,17 +56,11 @@ Testing flow:
   - full repository verification
   - runs build, tests, lint and doctor
 
-Expected output:
+Expected result:
 
-```text
-PASS environment node=v20.x
-PASS environment npm available
-PASS environment required paths present
-WARN environment aptos CLI missing, Move compile skipped
-PASS validate examples/tx-payloads/fixtures/valid-transfer/fixture.json
-PASS harness examples/tx-payloads/fixtures
-PASS report reports/devflow-report.json
-```
+- PASS or WARN lines for environment checks
+- PASS or FAIL lines for validate and harness steps
+- generated artifacts in `reports/`
 
 Generated artifacts:
 
