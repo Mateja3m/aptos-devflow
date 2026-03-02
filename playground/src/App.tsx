@@ -66,6 +66,22 @@ export function App() {
   const selectedFixture =
     fixtureOptions.find((fixture) => fixture.id === fixtureId) ??
     fixtureOptions[0];
+  const selectMenuProps = {
+    PaperProps: {
+      sx: {
+        mt: 1,
+        border: "1px solid rgba(22, 50, 79, 0.14)",
+        backgroundColor: "#fffaf2",
+        backgroundImage: "none",
+        boxShadow: "0 18px 40px rgba(22, 50, 79, 0.14)",
+      },
+    },
+    MenuListProps: {
+      sx: {
+        py: 0.5,
+      },
+    },
+  } as const;
 
   async function handleValidate(
     raw: string,
@@ -219,6 +235,11 @@ export function App() {
             }}
           >
             <Stack spacing={2}>
+              <Alert severity="info" sx={{ borderRadius: 3 }}>
+                Paste an Aptos payload, choose the input type and run offline
+                validation. The samples are bundled examples, but the checks are
+                real validator rules from the toolkit.
+              </Alert>
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={1.5}
@@ -229,6 +250,8 @@ export function App() {
                     value={inputType}
                     displayEmpty
                     onChange={handleInputTypeChange}
+                    MenuProps={selectMenuProps}
+                    sx={{ backgroundColor: "#fffaf2" }}
                   >
                     <MenuItem disabled value="">
                       Input type
@@ -290,12 +313,19 @@ export function App() {
             }}
           >
             <Stack spacing={2}>
+              <Alert severity="info" sx={{ borderRadius: 3 }}>
+                Run a bundled fixture from the repository examples. This is a
+                quick preview of the same fixture style used by the terminal
+                harness.
+              </Alert>
               <Stack direction={{ xs: "column", md: "row" }} spacing={1.5}>
                 <FormControl sx={{ minWidth: 220 }}>
                   <Select
                     value={fixtureId}
                     displayEmpty
                     onChange={handleFixtureChange}
+                    MenuProps={selectMenuProps}
+                    sx={{ backgroundColor: "#fffaf2" }}
                   >
                     <MenuItem disabled value="">
                       Fixture
@@ -348,6 +378,10 @@ export function App() {
             }}
           >
             <Stack spacing={2}>
+              <Alert severity="info" sx={{ borderRadius: 3 }}>
+                Load an existing report file to inspect summary counts and top
+                failures without running the CLI.
+              </Alert>
               <Button variant="outlined" component="label">
                 Upload report.json
                 <input
@@ -394,6 +428,15 @@ export function App() {
           }}
         >
           <Stack spacing={2}>
+            <Typography variant="subtitle1">
+              Validation results
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              This table shows ordered validator messages from the current run
+              or uploaded report. Offline browser mode uses real shared rules,
+              while online only checks stay skipped unless the optional remote
+              runner is used.
+            </Typography>
             <Stack direction={{ xs: "column", md: "row" }} spacing={1.5}>
               <Button
                 variant="outlined"
