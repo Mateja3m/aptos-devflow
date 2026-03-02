@@ -15,6 +15,7 @@ import {
 export interface ValidateOptions {
   profile?: ProfileName;
   cwd?: string;
+  now?: () => number;
 }
 
 export interface ValidateRun {
@@ -35,7 +36,7 @@ export function createOfflineContext(
     cwd: options.cwd ?? process.cwd(),
     mode: "offline",
     profile: options.profile ?? "strict",
-    now: () => Date.now(),
+    now: options.now ?? (() => Date.now()),
   };
 }
 
@@ -47,6 +48,7 @@ function resultFromRule(
   rule: ValidatorRule,
   startedAt: number,
   messages: ValidationMessage[],
+  context: ValidatorContext,
   metadata?: Record<string, unknown>,
 ): ValidationResult {
   return makeResult(
@@ -57,6 +59,7 @@ function resultFromRule(
     rule.title,
     rule.description,
     metadata,
+    context.now,
   );
 }
 
@@ -95,7 +98,7 @@ export const offlineRules: ValidatorRule[] = [
         }
       }
 
-      return resultFromRule(this, startedAt, messages);
+      return resultFromRule(this, startedAt, messages, context);
     },
   },
   {
@@ -137,7 +140,7 @@ export const offlineRules: ValidatorRule[] = [
         });
       }
 
-      return resultFromRule(this, startedAt, messages, {
+      return resultFromRule(this, startedAt, messages, context, {
         offlineCapable: true,
       });
     },
@@ -174,7 +177,7 @@ export const offlineRules: ValidatorRule[] = [
         }
       }
 
-      return resultFromRule(this, startedAt, messages);
+      return resultFromRule(this, startedAt, messages, context);
     },
   },
   {
@@ -215,7 +218,9 @@ export const offlineRules: ValidatorRule[] = [
         severity: "warning",
       });
 
-      return resultFromRule(this, startedAt, messages, { onlineOnly: true });
+      return resultFromRule(this, startedAt, messages, context, {
+        onlineOnly: true,
+      });
     },
   },
   {
@@ -235,7 +240,7 @@ export const offlineRules: ValidatorRule[] = [
           message: "Payload must be a JSON object.",
           severity: "error",
         });
-        return resultFromRule(this, startedAt, messages);
+        return resultFromRule(this, startedAt, messages, context);
       }
 
       if (
@@ -284,7 +289,7 @@ export const offlineRules: ValidatorRule[] = [
         });
       }
 
-      return resultFromRule(this, startedAt, messages);
+      return resultFromRule(this, startedAt, messages, context);
     },
   },
 ].sort((left, right) => left.id.localeCompare(right.id));

@@ -1,0 +1,30 @@
+{
+  "id": "valid-online-simulate",
+  "title": "Valid online simulation fixture",
+  "description": "Exercises the online simulation path when Aptos RPC is configured.",
+  "kind": "transaction-payload",
+  "expectedStatus": "pass",
+  "profile": "relaxed",
+  "mode": "online",
+  "metadata": {
+    "rpcUrlEnv": "APTOS_RPC_URL",
+    "simulationRequest": {
+      "sender": "0x1",
+      "sequence_number": "0",
+      "max_gas_amount": "1000",
+      "gas_unit_price": "1",
+      "expiration_timestamp_secs": "9999999999"
+    }
+  },
+  "input": {
+    "type": "entry_function_payload",
+    "function": "0x1::aptos_account::transfer",
+    "type_arguments": [],
+    "arguments": ["0x2", "1000"],
+    "max_gas_amount": 1000,
+    "gas_unit_price": 1,
+    "network": "testnet",
+    "url": "https://api.testnet.aptoslabs.com/v1",
+    "events": []
+  }
+}

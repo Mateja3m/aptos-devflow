@@ -2,11 +2,15 @@ dist
 build
 coverage
 reports
+reports-*
+reports-test
+reports-test-view
 .release
 
 node_modules
 .pnpm-store
 .npm
+.npm-cache
 
 *.log
 npm-debug.log*

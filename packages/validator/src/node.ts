@@ -25,6 +25,7 @@ export interface ValidateNodeOptions {
   cwd?: string;
   mode?: "offline" | "online";
   fetchImpl?: typeof fetch;
+  now?: () => number;
 }
 
 const moveCompileRule: ValidatorRule = {
@@ -45,6 +46,8 @@ const moveCompileRule: ValidatorRule = {
         [],
         this.title,
         this.description,
+        undefined,
+        context.now,
       );
     }
 
@@ -93,6 +96,8 @@ const moveCompileRule: ValidatorRule = {
       messages,
       this.title,
       this.description,
+      undefined,
+      context.now,
     );
   },
 };
@@ -120,6 +125,7 @@ const onlineRule: ValidatorRule = {
         this.title,
         this.description,
         { onlineOnly: true },
+        context.now,
       );
     }
 
@@ -155,6 +161,114 @@ const onlineRule: ValidatorRule = {
       this.title,
       this.description,
       { onlineOnly: true },
+      context.now,
+    );
+  },
+};
+
+const simulationRule: ValidatorRule = {
+  id: "aptos.tx.simulation",
+  title: "Aptos RPC simulation",
+  description:
+    "Calls the Aptos simulate transaction endpoint when RPC configuration is provided.",
+  severity: "warning" as const,
+  offlineCapable: false,
+  async check(input: ValidatorInput, context: ValidatorContext) {
+    const startedAt = context.now?.() ?? Date.now();
+    const messages: ValidationMessage[] = [];
+    const metadata =
+      typeof input.metadata === "object" && input.metadata
+        ? (input.metadata as Record<string, unknown>)
+        : {};
+    const rpcUrlEnv =
+      typeof metadata.rpcUrlEnv === "string" ? metadata.rpcUrlEnv : undefined;
+    const rpcUrl =
+      typeof metadata.rpcUrl === "string"
+        ? metadata.rpcUrl
+        : rpcUrlEnv
+          ? process.env[rpcUrlEnv]
+          : undefined;
+    const simulationRequest =
+      typeof metadata.simulationRequest === "object" &&
+      metadata.simulationRequest
+        ? (metadata.simulationRequest as Record<string, unknown>)
+        : undefined;
+
+    if (context.mode === "offline") {
+      messages.push({
+        code: "simulation.offline.skipped",
+        message: "Aptos RPC simulation skipped in offline mode.",
+        severity: "warning",
+      });
+      return makeResult(
+        this.id,
+        "warning",
+        startedAt,
+        messages,
+        this.title,
+        this.description,
+        { onlineOnly: true, rpcRequired: true },
+        context.now,
+      );
+    }
+
+    if (!context.fetchImpl || !rpcUrl || !simulationRequest) {
+      messages.push({
+        code: "simulation.config.skipped",
+        message:
+          "Aptos RPC simulation skipped because rpcUrl or simulationRequest is missing.",
+        severity: "warning",
+      });
+      return makeResult(
+        this.id,
+        "warning",
+        startedAt,
+        messages,
+        this.title,
+        this.description,
+        { onlineOnly: true, rpcRequired: true },
+        context.now,
+      );
+    }
+
+    try {
+      const response = await context.fetchImpl(
+        `${rpcUrl.replace(/\/$/, "")}/transactions/simulate`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            ...simulationRequest,
+            payload: input.data,
+          }),
+        },
+      );
+      if (!response.ok) {
+        messages.push({
+          code: "simulation.failed",
+          message: `Aptos RPC simulation returned ${response.status}.`,
+          severity: "warning",
+        });
+      }
+    } catch {
+      messages.push({
+        code: "simulation.failed",
+        message: "Aptos RPC simulation request failed.",
+        severity: "warning",
+      });
+    }
+
+    return makeResult(
+      this.id,
+      messages.length > 0 ? "warning" : "pass",
+      startedAt,
+      messages,
+      this.title,
+      this.description,
+      { onlineOnly: true, rpcRequired: true },
+      context.now,
     );
   },
 };
@@ -170,8 +284,8 @@ export async function validateInputNode(
   };
   return runRules(
     input,
-    [...offlineRules, moveCompileRule, onlineRule].sort((left, right) =>
-      left.id.localeCompare(right.id),
+    [...offlineRules, moveCompileRule, onlineRule, simulationRule].sort(
+      (left, right) => left.id.localeCompare(right.id),
     ),
     context,
   );

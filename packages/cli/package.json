@@ -1,5 +1,5 @@
 {
-  "name": "@idoa/cli",
+  "name": "@idoa/aptos-devflow-cli",
   "version": "0.1.0",
   "type": "module",
   "description": "Aptos Devflow command line interface for validation, harness runs, reports and doctor checks.",

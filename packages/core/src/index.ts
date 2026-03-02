@@ -180,11 +180,12 @@ export function makeResult(
   title?: string | undefined,
   description?: string | undefined,
   metadata?: Record<string, unknown> | undefined,
+  now: () => number = Date.now,
 ): ValidationResult {
   return {
     ruleId,
     status,
-    durationMs: Math.max(0, Date.now() - startedAt),
+    durationMs: Math.max(0, now() - startedAt),
     messages: sortMessages(messages),
     title,
     description,

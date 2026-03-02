@@ -15,6 +15,7 @@ import { runHarness } from "@idoa/harness";
 import { formatReportJson, formatSummaryText, parseReport } from "@idoa/report";
 import { detectKind, validateOfflineInput } from "@idoa/validator";
 import { validateInputNode } from "@idoa/validator/node";
+import { doctorFixtures } from "./doctor-fixtures.js";
 import { ciTemplates, sharedRunScript } from "./templates.js";
 
 const execFileAsync = promisify(execFile);
@@ -95,11 +96,13 @@ async function writeSingleValidationReport(
   results: ValidationResult[],
   target: string,
   outputDir: string,
+  now: () => number,
+  profile: "strict" | "relaxed" = "relaxed",
 ): Promise<Report> {
-  const summary = summarizeDetail(results, "relaxed");
+  const summary = summarizeDetail(results, profile);
   const report: Report = {
     schemaVersion: "1.0.0",
-    generatedAt: new Date().toISOString(),
+    generatedAt: new Date(now()).toISOString(),
     durationMs: results.reduce((sum, result) => sum + result.durationMs, 0),
     summary: summary.summary,
     environment: {
@@ -107,7 +110,7 @@ async function writeSingleValidationReport(
       platform: process.platform,
       toolVersion: "0.1.0",
       mode: "offline",
-      profile: "relaxed",
+      profile,
     },
     details: [
       {
@@ -133,17 +136,71 @@ async function writeSingleValidationReport(
   return report;
 }
 
-async function handleDoctor(io: CliIO): Promise<number> {
-  const outputDir = path.join(process.cwd(), "reports");
-  const sampleFixturePath = path.join(
+function createClock(): () => number {
+  const fixedTime = process.env.DEVFLOW_FIXED_TIME;
+  if (!fixedTime) {
+    return () => Date.now();
+  }
+  const parsed = Number.parseInt(fixedTime, 10);
+  if (!Number.isNaN(parsed)) {
+    return () => parsed;
+  }
+  const timestamp = Date.parse(fixedTime);
+  return Number.isNaN(timestamp) ? () => Date.now() : () => timestamp;
+}
+
+async function materializeDoctorFixtures(baseDir: string): Promise<void> {
+  for (const fixture of doctorFixtures) {
+    const fixtureDir = path.join(baseDir, fixture.id);
+    await mkdir(fixtureDir, { recursive: true });
+    await writeFile(
+      path.join(fixtureDir, "fixture.json"),
+      JSON.stringify(fixture, null, 2),
+      "utf8",
+    );
+  }
+}
+
+async function resolveDoctorTargets(outputDir: string): Promise<{
+  fixtureDir: string;
+  sampleFixturePath: string;
+  sourceMode: "repo" | "bundled";
+}> {
+  const repoFixtureDir = path.join(
+    process.cwd(),
     "examples",
     "tx-payloads",
     "fixtures",
+  );
+  const repoSampleFixturePath = path.join(
+    repoFixtureDir,
     "valid-transfer",
     "fixture.json",
   );
-  const fixtureDir = path.join("examples", "tx-payloads", "fixtures");
-  const requiredPaths = ["packages", "examples", fixtureDir, sampleFixturePath];
+  if (existsSync(repoFixtureDir) && existsSync(repoSampleFixturePath)) {
+    return {
+      fixtureDir: repoFixtureDir,
+      sampleFixturePath: repoSampleFixturePath,
+      sourceMode: "repo",
+    };
+  }
+
+  const bundledFixtureDir = path.join(outputDir, ".doctor-fixtures");
+  await materializeDoctorFixtures(bundledFixtureDir);
+  return {
+    fixtureDir: bundledFixtureDir,
+    sampleFixturePath: path.join(
+      bundledFixtureDir,
+      "valid-transfer",
+      "fixture.json",
+    ),
+    sourceMode: "bundled",
+  };
+}
+
+async function handleDoctor(io: CliIO): Promise<number> {
+  const now = createClock();
+  const outputDir = path.join(process.cwd(), "reports");
   const topFailures: string[] = [];
 
   const nodeOk =
@@ -165,13 +222,21 @@ async function handleDoctor(io: CliIO): Promise<number> {
     ),
   );
 
+  const { fixtureDir, sampleFixturePath, sourceMode } =
+    await resolveDoctorTargets(outputDir);
+  const requiredPaths =
+    sourceMode === "repo"
+      ? ["packages", "examples", fixtureDir, sampleFixturePath]
+      : [fixtureDir, sampleFixturePath];
   const missingPathFailures = environmentFailures(requiredPaths);
   io.out(
     statusLine(
       missingPathFailures.length === 0 ? "PASS" : "FAIL",
       "environment",
       missingPathFailures.length === 0
-        ? "required paths present"
+        ? sourceMode === "repo"
+          ? "required paths present"
+          : "bundled fixtures prepared"
         : `${missingPathFailures.length} path checks failed`,
     ),
   );
@@ -198,6 +263,7 @@ async function handleDoctor(io: CliIO): Promise<number> {
     ) as {
       input: unknown;
       kind: ValidatorInput["kind"];
+      profile?: "strict" | "relaxed";
     };
     const sampleValidation = await validateOfflineInput(
       {
@@ -205,22 +271,28 @@ async function handleDoctor(io: CliIO): Promise<number> {
         source: sampleFixturePath,
         data: sampleFixture.input,
       },
-      { profile: "relaxed" },
+      { profile: sampleFixture.profile ?? "relaxed", now },
     );
     const validationSummary = summarizeDetail(
       sampleValidation.results,
-      "relaxed",
+      sampleFixture.profile ?? "relaxed",
     );
     await writeSingleValidationReport(
       sampleValidation.results,
-      sampleFixturePath,
+      sourceMode === "repo"
+        ? path.relative(process.cwd(), sampleFixturePath)
+        : "bundled-fixtures/valid-transfer/fixture.json",
       outputDir,
+      now,
+      sampleFixture.profile ?? "relaxed",
     );
     io.out(
       statusLine(
         validationSummary.status === "pass" ? "PASS" : "FAIL",
         "validate",
-        `${sampleFixturePath}`,
+        sourceMode === "repo"
+          ? path.relative(process.cwd(), sampleFixturePath)
+          : "bundled-fixtures/valid-transfer/fixture.json",
       ),
     );
     if (validationSummary.status !== "pass") {
@@ -235,12 +307,14 @@ async function handleDoctor(io: CliIO): Promise<number> {
       );
     }
 
-    const harnessResult = await runHarness({ fixtureDir, outputDir });
+    const harnessResult = await runHarness({ fixtureDir, outputDir, now });
     io.out(
       statusLine(
         harnessResult.exitCode === 0 ? "PASS" : "FAIL",
         "harness",
-        `${fixtureDir}`,
+        sourceMode === "repo"
+          ? path.relative(process.cwd(), fixtureDir)
+          : "bundled-fixtures",
       ),
     );
     io.out(

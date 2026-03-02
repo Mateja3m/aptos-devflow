@@ -14,6 +14,7 @@ import { validateInputNode } from "@idoa/validator/node";
 export interface HarnessOptions {
   fixtureDir: string;
   outputDir?: string;
+  now?: () => number;
 }
 
 export async function loadFixtures(fixtureDir: string): Promise<Fixture[]> {
@@ -50,7 +51,8 @@ async function collectFixtureFiles(rootDir: string): Promise<string[]> {
 export async function runHarness(
   options: HarnessOptions,
 ): Promise<HarnessRunResult> {
-  const startedAt = Date.now();
+  const now = options.now ?? (() => Date.now());
+  const startedAt = now();
   const outputDir = options.outputDir ?? path.join(process.cwd(), "reports");
   let fixtures: Fixture[];
   try {
@@ -58,8 +60,8 @@ export async function runHarness(
   } catch {
     const report: Report = {
       schemaVersion: "1.0.0",
-      generatedAt: new Date().toISOString(),
-      durationMs: Date.now() - startedAt,
+      generatedAt: new Date(now()).toISOString(),
+      durationMs: now() - startedAt,
       summary: { total: 0, pass: 0, fail: 0, warning: 0 },
       environment: {
         nodeVersion: process.version,
@@ -90,8 +92,8 @@ export async function runHarness(
   if (fixtures.length === 0) {
     const report: Report = {
       schemaVersion: "1.0.0",
-      generatedAt: new Date().toISOString(),
-      durationMs: Date.now() - startedAt,
+      generatedAt: new Date(now()).toISOString(),
+      durationMs: now() - startedAt,
       summary: { total: 0, pass: 0, fail: 0, warning: 0 },
       environment: {
         nodeVersion: process.version,
@@ -130,6 +132,7 @@ export async function runHarness(
         mode: fixture.mode ?? "offline",
         profile: fixture.profile ?? "strict",
         fetchImpl: globalThis.fetch,
+        now,
       },
     );
 
@@ -150,14 +153,16 @@ export async function runHarness(
   const summary = summarizeResults(flattenedResults);
   const report: Report = {
     schemaVersion: "1.0.0",
-    generatedAt: new Date().toISOString(),
-    durationMs: Date.now() - startedAt,
+    generatedAt: new Date(now()).toISOString(),
+    durationMs: now() - startedAt,
     summary,
     environment: {
       nodeVersion: process.version,
       platform: process.platform,
       toolVersion: "0.1.0",
-      mode: "offline",
+      mode: fixtures.some((fixture) => fixture.mode === "online")
+        ? "online"
+        : "offline",
       profile: "strict",
     },
     details,

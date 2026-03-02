@@ -9,17 +9,19 @@
     "node": ">=18.18.0"
   },
   "scripts": {
+    "build:packages": "tsc -b tsconfig.build.json && tsc -p playground/server/tsconfig.json",
     "build": "tsc -b tsconfig.build.json && tsc -p playground/server/tsconfig.json && npm --prefix playground run build",
     "clean": "node scripts/clean.mjs",
-    "doctor": "node packages/cli/dist/bin/devflow.js doctor",
+    "doctor:cli": "node packages/cli/dist/bin/devflow.js doctor",
+    "doctor": "npm run build && npm run doctor:cli",
     "lint": "biome check .",
     "format": "biome check --write .",
     "typecheck": "tsc -b tsconfig.build.json --pretty false",
-    "test": "vitest run",
-    "verify": "npm run build && npm test && npm run lint && npm run doctor",
-    "release:check": "npm run build && npm test && npm pack --workspaces --pack-destination .release",
+    "test": "npm run build:packages && vitest run",
+    "verify": "npm run build && npm test && npm run lint && npm run doctor:cli",
+    "release:check": "npm run build && npm test && npm pack --workspace packages/core --workspace packages/report --workspace packages/validator --workspace packages/harness --workspace packages/cli --pack-destination .release",
     "release:tag": "node scripts/release-tag.mjs",
-    "release:publish": "npm publish --workspaces --access public"
+    "release:publish": "npm publish --workspace packages/core --workspace packages/report --workspace packages/validator --workspace packages/harness --workspace packages/cli --access public"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

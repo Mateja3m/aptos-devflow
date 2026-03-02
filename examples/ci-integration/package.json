@@ -1,0 +1,9 @@
+{
+  "name": "aptos-devflow-ci-integration-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "doctor": "npx devflow doctor",
+    "verify": "npx devflow validate examples/tx-payloads/fixtures/valid-transfer/fixture.json -j && npx devflow harness run examples/tx-payloads/fixtures -o reports"
+  }
+}

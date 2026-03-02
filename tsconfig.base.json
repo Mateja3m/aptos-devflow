@@ -11,7 +11,7 @@
       "@idoa/validator": ["packages/validator/src/index.ts"],
       "@idoa/validator/node": ["packages/validator/src/node.ts"],
       "@idoa/harness": ["packages/harness/src/index.ts"],
-      "@idoa/cli": ["packages/cli/src/index.ts"]
+      "@idoa/aptos-devflow-cli": ["packages/cli/src/index.ts"]
     },
     "declaration": true,
     "sourceMap": true,

@@ -12,8 +12,7 @@ fi
 
 npm ci || npm install
 npm run build
-node packages/cli/dist/bin/devflow.js validate examples/tx-payloads/fixtures/valid-transfer/fixture.json -j > reports/devflow-validate.json
-node packages/cli/dist/bin/devflow.js harness run examples/tx-payloads/fixtures -o reports
+npm run doctor:cli
 cat reports/devflow-summary.txt
 `;
 
