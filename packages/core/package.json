@@ -4,13 +4,13 @@
   "type": "module",
   "description": "Shared Aptos Devflow types, report models and utility helpers.",
   "license": "MIT",
-  "homepage": "https://github.com/idoa-network/aptos-devflow-toolkit",
+  "homepage": "https://github.com/Mateja3m/aptos-devflow",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/idoa-network/aptos-devflow-toolkit.git"
+    "url": "git+https://github.com/Mateja3m/aptos-devflow.git"
   },
   "bugs": {
-    "url": "https://github.com/idoa-network/aptos-devflow-toolkit/issues"
+    "url": "https://github.com/Mateja3m/aptos-devflow/issues"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
