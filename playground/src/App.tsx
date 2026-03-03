@@ -428,9 +428,7 @@ export function App() {
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="subtitle1">
-              Validation results
-            </Typography>
+            <Typography variant="subtitle1">Validation results</Typography>
             <Typography variant="body2" color="text.secondary">
               This table shows ordered validator messages from the current run
               or uploaded report. Offline browser mode uses real shared rules,
