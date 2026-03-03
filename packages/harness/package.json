@@ -1,6 +1,6 @@
 {
   "name": "@idoa/harness",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Fixture runner for deterministic Aptos Devflow report generation.",
   "license": "MIT",
@@ -20,7 +20,11 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "publishConfig": {
     "access": "public"
   },
