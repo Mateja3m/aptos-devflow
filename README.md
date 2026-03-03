@@ -75,7 +75,7 @@ The doctor and verify commands validate the workflow and generate standardized r
 
 The playground is a separate quick try in browser for offline validation and report preview. It is not the primary proof command.
 
-```bash
+```
 cd playground
 npm install
 npm run dev
